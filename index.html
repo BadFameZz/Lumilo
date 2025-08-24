@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Lumilo — Leseprobe & Feedback</title>
-  <meta name="description" content="Leseprobe als EPUB im Browser lesen, herunterladen und strukturiertes Feedback geben." />
+  <meta name="description" content="Leseprobe als EPUB im Browser lesen, herunterladen und kurzes Feedback mit Sterne-Bewertung geben." />
   <meta property="og:title" content="Lumilo — Leseprobe & Feedback" />
   <meta property="og:description" content="Leseprobe im Browser lesen und Feedback dalassen." />
   <meta property="og:type" content="website" />
@@ -12,11 +12,11 @@
   <meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f6f8fb" media="(prefers-color-scheme: light)">
   <style>
-    /* macOS 26 "Liquid Glass" inspiriertes Design */
+    /* macOS 26 „Liquid Glass“-Look */
     :root{
       --bg-d:#0b0f14; --bg-l:#f6f8fb; --text-d:#e8eef7; --text-l:#0d1117;
-      --glass: rgba(255,255,255,.08); --stroke: rgba(255,255,255,.14);
-      --brand:#5cc8ff; --brand-2:#9fe3ff; --ok:#3ddc97; --warn:#ffb65c;
+      --stroke: rgba(255,255,255,.14); --glass: rgba(255,255,255,.08);
+      --brand:#5cc8ff; --brand-2:#9fe3ff; --muted:#a7b3c2;
       --shadow: 0 10px 40px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
     }
     *{box-sizing:border-box}
@@ -30,46 +30,82 @@
         linear-gradient(180deg,#0c141f 0%, #0a0f16 60%, #0b0f14 100%);
       -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
-    @media (prefers-color-scheme: light){ body{ color:var(--text-l); background:linear-gradient(180deg,#f7fbff 0,#eef3f9 100%);} .card, .panel{ background:rgba(255,255,255,.65);} }
+    @media (prefers-color-scheme: light){
+      body{ color:var(--text-l); background:linear-gradient(180deg,#f7fbff 0,#eef3f9 100%); }
+      .card,.panel{ background:rgba(255,255,255,.65); }
+    }
     a{color:var(--brand); text-decoration:none}
     a:hover{text-decoration:underline}
     .container{ width:min(1100px,92%); margin:0 auto; }
-    header{ position:sticky; top:0; z-index:20; backdrop-filter: saturate(140%) blur(12px); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); border-bottom:1px solid var(--stroke); }
+
+    header{ position:sticky; top:0; z-index:20; backdrop-filter:saturate(140%) blur(12px);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      border-bottom:1px solid var(--stroke);
+    }
     .top{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0; }
     .brand{ display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px; }
     .traffic{ display:inline-grid; grid-auto-flow:column; gap:8px; }
     .dot{ width:12px; height:12px; border-radius:50%; box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 0 0 1px rgba(0,0,0,.25); }
     .dot.red{ background:#ff5f57; } .dot.yellow{ background:#ffbd2e; } .dot.green{ background:#28c840; }
+
     .hero{ display:grid; gap:28px; padding:42px 0 8px; }
     .hero-inner{ display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:center; }
-    .card{ border:1px solid var(--stroke); border-radius:20px; background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)); box-shadow: var(--shadow); }
+
+    .card{ border:1px solid var(--stroke); border-radius:20px;
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)); box-shadow:var(--shadow); }
     .card.pad{ padding:18px; }
+
     .title{ font-size:clamp(28px,4vw,44px); line-height:1.05; margin:6px 0 10px; }
-    .subtitle{ color:#a7b3c2; margin:0 0 16px; }
-    .badge{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--stroke); border-radius:999px; font-size:12px; color:#a7b3c2; backdrop-filter: blur(8px); background:rgba(255,255,255,.06); }
+    .subtitle{ color:var(--muted); margin:0 0 16px; }
+
+    .badge{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--stroke);
+      border-radius:999px; font-size:12px; color:var(--muted); backdrop-filter:blur(8px); background:rgba(255,255,255,.06); }
+
     .row{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
-    .btn{ display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:12px; border:1px solid var(--stroke); font-weight:600; cursor:pointer; backdrop-filter: blur(8px);
-      background:linear-gradient(180deg, var(--brand), var(--brand-2)); color:#001321; box-shadow: 0 6px 18px rgba(11,182,255,.25); }
+    .btn{ display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:12px;
+      border:1px solid var(--stroke); font-weight:600; cursor:pointer; backdrop-filter: blur(8px);
+      background:linear-gradient(180deg, var(--brand), var(--brand-2)); color:#001321;
+      box-shadow:0 6px 18px rgba(11,182,255,.25); }
     .btn.secondary{ background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)); color:inherit; }
     .btn:disabled{ opacity:.6; cursor:not-allowed; }
+
     .cover{ width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:16px; border:1px solid var(--stroke); }
+
     .section{ padding:28px 0; }
     .grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
-    .panel{ padding:18px; border-radius:18px; border:1px solid var(--stroke); background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)); box-shadow: var(--shadow); }
+    .panel{ padding:18px; border-radius:18px; border:1px solid var(--stroke);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)); box-shadow:var(--shadow); }
     .panel h3{ margin:0 0 8px; }
-    .muted{ color:#a7b3c2; }
+    .muted{ color:var(--muted); }
     .small{ font-size:14px; }
+
     .viewer{ height:70vh; min-height:420px; border-radius:16px; overflow:hidden; border:1px solid var(--stroke); position:relative; }
     .viewer-toolbar{ display:flex; gap:8px; align-items:center; justify-content:space-between; margin:10px 0 14px; }
-    .chip{ padding:6px 10px; border:1px solid var(--stroke); border-radius:999px; backdrop-filter:blur(8px); background:rgba(255,255,255,.06); color:#a7b3c2; }
+    .chip{ padding:6px 10px; border:1px solid var(--stroke); border-radius:999px; backdrop-filter:blur(8px); background:rgba(255,255,255,.06); color:var(--muted); }
     .range{ accent-color: var(--brand); }
-    footer{ border-top:1px solid var(--stroke); padding:26px 0 42px; color:#a7b3c2; }
-    .bg-orb{ position:fixed; inset:auto -15% -15% auto; width:50vw; height:50vw; background: radial-gradient(closest-side, rgba(159,227,255,.14), transparent 70%); filter: blur(40px); pointer-events:none; z-index:-1; }
+
+    /* Sterne-Rating */
+    .stars{ display:inline-flex; gap:6px; }
+    .stars input{ display:none; }
+    .stars label{
+      font-size:22px; line-height:1; cursor:pointer; filter:drop-shadow(0 1px 0 rgba(0,0,0,.25));
+      color:#6b7a90; transition:transform .05s ease;
+    }
+    .stars label:hover{ transform:scale(1.05); }
+    .stars input:checked ~ label, .stars label.selected{ color:#ffd36b; }
+
+    footer{ border-top:1px solid var(--stroke); padding:26px 0 42px; color:var(--muted); }
+
+    .bg-orb{ position:fixed; inset:auto -15% -15% auto; width:50vw; height:50vw;
+      background: radial-gradient(closest-side, rgba(159,227,255,.14), transparent 70%);
+      filter: blur(40px); pointer-events:none; z-index:-1; }
+
     @media (max-width: 900px){ .hero-inner{ grid-template-columns:1fr; } .grid{ grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
   <div class="bg-orb" aria-hidden="true"></div>
+
   <header>
     <div class="container top">
       <div class="brand">
@@ -90,10 +126,10 @@
           <p class="muted">Kurzpitch (2–3 Sätze): Was erwartet Leser:innen? Für wen ist das Buch geschrieben? Welche Themen/Atmosphäre?</p>
           <div class="row" style="margin-top:14px;">
             <button id="readBtn" class="btn">Jetzt im Browser lesen</button>
-            <a id="downloadLink"$1href="lumilo - badfamezz.epub" download>EPUB herunterladen</a>
+            <a id="downloadLink" class="btn secondary" href="lumilo - badfamezz.epub" download>EPUB herunterladen</a>
             <a class="btn secondary" href="#feedback">Feedback geben</a>
           </div>
-          <p class="small muted" style="margin-top:10px;">Hinweis: Das Online-Lesen funktioniert am besten in modernen Browsern. Auf E‑Readern bitte die EPUB-Datei nutzen.</p>
+          <p class="small muted" style="margin-top:10px;">Hinweis: Das Online-Lesen funktioniert am besten in modernen Browsern. Auf E-Readern bitte die EPUB-Datei nutzen.</p>
         </div>
         <div class="card pad">
           <img id="cover" class="cover" src="lumilo - badfamezz.jpg" alt="Buchcover" />
@@ -120,70 +156,56 @@
 
     <section id="feedback" class="section grid">
       <div class="panel">
-        <h3>Dein Feedback (3–5 Minuten)</h3>
-        <p class="muted">Fülle das kurze Formular aus. Konkrete Stellen (Kapitel/Absatz) bitte nennen.</p>
-        <!-- Netlify Forms: funktioniert ohne weiteren Code im Netlify-Dashboard -->
-        <form name="feedback" method="POST" action="/?thanks=1" data-netlify="true" netlify-honeypot="bot-field" style="display:grid; gap:12px;">
-          <input type="hidden" name="form-name" value="feedback" />
-          <p class="hidden" style="display:none;">
-            <label>Bitte nicht ausfüllen: <input name="bot-field" /></label>
-          </p>
-          <label>Wie klar/motivierend ist der Einstieg?
-            <select name="einstieg">
-              <option>1 - unklar</option>
-              <option>2</option>
-              <option>3 - okay</option>
-              <option>4</option>
-              <option>5 - sehr klar</option>
-            </select>
+        <h3>Dein kurzes Feedback</h3>
+        <form name="kurzfeedback" method="POST" action="/?thanks=1" data-netlify="true" netlify-honeypot="bot-field" style="display:grid; gap:12px;">
+          <input type="hidden" name="form-name" value="kurzfeedback" />
+          <p style="display:none;"><label>Bitte nicht ausfüllen: <input name="bot-field" /></label></p>
+
+          <div class="row" aria-label="Sterne-Bewertung">
+            <span class="small muted">Bewertung:</span>
+            <fieldset class="stars" style="border:none;margin:0;padding:0;">
+              <!-- Radio-Reihenfolge invertiert, damit CSS-Sibling-Selektor funktioniert -->
+              <input type="radio" id="star5" name="rating" value="5"><label for="star5" title="5 Sterne">★</label>
+              <input type="radio" id="star4" name="rating" value="4"><label for="star4" title="4 Sterne">★</label>
+              <input type="radio" id="star3" name="rating" value="3"><label for="star3" title="3 Sterne">★</label>
+              <input type="radio" id="star2" name="rating" value="2"><label for="star2" title="2 Sterne">★</label>
+              <input type="radio" id="star1" name="rating" value="1" checked><label for="star1" title="1 Stern">★</label>
+            </fieldset>
+          </div>
+
+          <label>Kurzkommentar (1–2 Sätze)
+            <textarea name="kommentar" rows="3" placeholder="Was hat gut funktioniert? Was nicht?"></textarea>
           </label>
-          <label>Würdest du weiterlesen?
-            <select name="continue">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-          </label>
-          <label>Stellen, die langsam/verwirrend waren
-            <textarea name="slow" rows="3" placeholder="Kapitel/Absatz + kurzer Grund"></textarea>
-          </label>
-          <label>Hauptfigur in 3 Adjektiven
-            <input name="char3" type="text" placeholder="z. B. ehrlich, impulsiv, verletzlich" />
-          </label>
-          <label>Sonstiges Feedback
-            <textarea name="notes" rows="4"></textarea>
-          </label>
-          <label class="small muted">E‑Mail (optional, für Rückfragen)
-            <input name="email" type="email" placeholder="beispiel@mail.de" />
-          </label>
+
           <div class="row">
-            <button class="btn" type="submit">Feedback senden</button>
-            <span class="small muted">Datenschutz: Speicherung nur zur Überarbeitung; keine Weitergabe.</span>
+            <button class="btn" type="submit">Senden</button>
+            <span class="small muted">Datenschutz: Speicherung nur zur Überarbeitung, keine Weitergabe.</span>
           </div>
         </form>
         <div id="thanks" class="small muted" style="display:none; margin-top:10px;">Danke! Dein Feedback wurde gesendet.</div>
       </div>
+
       <div class="panel">
-        <h3>Worauf ich besonders Feedback möchte</h3>
+        <h3>Worauf ich Feedback möchte</h3>
         <ul class="muted">
           <li>Ist der Einstieg klar und motivierend?</li>
           <li>Tempo/Spannung: Wo wird es langsam?</li>
           <li>Hauptfigur nach Kapitel X in 3 Adjektiven?</li>
           <li>Unklarheiten/Logikfehler – bitte mit Stelle</li>
-          <li>Würdest du weiterlesen (1–5)? Was fehlt zu 5?</li>
         </ul>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="container small">© <span id="year"></span> BadFameZz. Alle Rechte vorbehalten. · Version v1.0 · <a href="#feedback">Feedback</a></div>
+    <div class="container small">© <span id="year"></span> BadFameZz. Alle Rechte vorbehalten. · v1.1 · <a href="#feedback">Feedback</a></div>
   </footer>
 
   <noscript>
-    <div class="container" style="padding:14px; color:#ffb4b4;">Diese Seite benötigt JavaScript. Du kannst die <a href="lumilo - badfamezz.epub">EPUB-Datei hier herunterladen</a>.</div>
+    <div class="container" style="padding:14px; color:#ffb4b4;">
+      Diese Seite benötigt JavaScript. Du kannst die
+      <a href="lumilo - badfamezz.epub">EPUB-Datei hier herunterladen</a>.
+    </div>
   </noscript>
 
   <!-- EPUB.js laden -->
@@ -198,77 +220,71 @@
       const fontSize = document.getElementById('fontSize');
       const themeToggle = document.getElementById('themeToggle');
       const yearEl = document.getElementById('year');
-      const downloadLink = document.getElementById('downloadLink');
       const cover = document.getElementById('cover');
       yearEl.textContent = new Date().getFullYear();
 
-      // Fallback-Cover (SVG, eingebettet)
+      // Cover-Fallback (eingebettetes SVG)
       const COVER_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
         <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1600" viewBox="0 0 1200 1600">
-          <defs>
-            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#0b0f14"/>
-              <stop offset="50%" stop-color="#152234"/>
-              <stop offset="100%" stop-color="#0b0f14"/>
-            </linearGradient>
-          </defs>
+          <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#0b0f14"/><stop offset="50%" stop-color="#152234"/><stop offset="100%" stop-color="#0b0f14"/>
+          </linearGradient></defs>
           <rect width="1200" height="1600" fill="url(#g)"/>
           <circle cx="980" cy="180" r="420" fill="rgba(159,227,255,0.14)"/>
           <text x="80" y="820" font-family="ui-rounded,-apple-system,system-ui,Segoe UI,Roboto" font-size="160" fill="#e8eef7">Lumilo</text>
-          <text x="84" y="900" font-family="ui-rounded,-apple-system,system-ui,Segoe UI,Roboto" font-size="40" fill="#a7b3c2">Leseprobe</text>
+          <text x="84" y="900" font-size="40" fill="#a7b3c2">Leseprobe</text>
         </svg>`);
       cover.addEventListener('error', ()=>{ cover.src = COVER_FALLBACK; });
 
-      const CANDIDATES = [ 'lumilo - badfamezz.epub', 'lumilo.epub', 'Lumilo - BadFameZz.epub', 'book.epub' ];
-      const PROGRESS_KEY = 'epub-progress-cfi-v1';
-      let book, rendition, chosenUrl = null;
+      const EPUB_PATH = 'lumilo - badfamezz.epub';
+      const EPUB_URL = encodeURI(EPUB_PATH); // Spaces → %20
 
-      async function resolveBookUrl(){
-        for(const url of CANDIDATES){
-          try{ const r = await fetch(url, { method:'HEAD' }); if(r.ok){ return url; } }catch(_){/* ignore */}
-        }
-        return null;
-      }
+      const PROGRESS_KEY = 'epub-progress-cfi-v1';
+      let book, rendition;
 
       function humanPercent(loc){
         if(!loc || !book?.locations?.percentageFromCfi) return '0%';
-        try{ return Math.round(book.locations.percentageFromCfi(loc.start.cfi)*100) + '%'; }catch{ return '0%'; }
+        try { return Math.round(book.locations.percentageFromCfi(loc.start.cfi)*100) + '%'; } catch { return '0%'; }
       }
 
       async function initReader(){
         if(rendition) return;
-        if(!chosenUrl){ chosenUrl = await resolveBookUrl(); }
-        if(!chosenUrl){
-          readBtn.disabled = true; readBtn.textContent = 'EPUB fehlt';
-          return;
+        // EPUB robust laden (ArrayBuffer, unabhängig vom MIME-Type)
+        let res;
+        try{
+          res = await fetch(EPUB_URL, {cache:'no-store'});
+        }catch(e){
+          readBtn.disabled = true; readBtn.textContent = 'Netzwerkfehler'; return;
         }
+        if(!res.ok){
+          readBtn.disabled = true; readBtn.textContent = 'EPUB fehlt'; return;
+        }
+        const buffer = await res.arrayBuffer();
+
         readerSection.style.display = 'block';
-        book = ePub(chosenUrl);
-        rendition = book.renderTo('viewer',{ width:'100%', height:'100%', spread:'auto', allowScriptedContent:false });
-        try{ await book.ready; await book.locations.generate(750); }catch{}
-        rendition.themes.default({ body: { background: 'transparent', color: 'inherit', lineHeight: '1.6' }});
+        book = ePub(buffer); // ArrayBuffer → epub.js
+        rendition = book.renderTo('viewer', { width:'100%', height:'100%', spread:'auto', allowScriptedContent:false });
+
+        try { await book.ready; await book.locations.generate(750); } catch {}
+
+        rendition.themes.default({ body: { background:'transparent', color:'inherit', lineHeight:'1.6' }});
         rendition.themes.fontSize(fontSize.value + '%');
+
         rendition.on('relocated', (loc)=>{
           locEl.textContent = humanPercent(loc);
           if(loc?.start?.cfi) localStorage.setItem(PROGRESS_KEY, loc.start.cfi);
         });
-        const saved = localStorage.getItem(PROGRESS_KEY);
-        try{ await rendition.display(saved || undefined); }catch{ await rendition.display(); }
-      }
 
-      // Download-Link & Button-Status vorbereiten
-      (async ()=>{
-        chosenUrl = await resolveBookUrl();
-        if(chosenUrl){ downloadLink.href = chosenUrl; }
-        else{ downloadLink.setAttribute('aria-disabled','true'); downloadLink.classList.add('disabled'); downloadLink.textContent='EPUB fehlt'; }
-      })();
+        const saved = localStorage.getItem(PROGRESS_KEY);
+        try { await rendition.display(saved || undefined); } catch { await rendition.display(); }
+      }
 
       readBtn.addEventListener('click', initReader);
       prevBtn.addEventListener('click', ()=> rendition && rendition.prev());
       nextBtn.addEventListener('click', ()=> rendition && rendition.next());
       fontSize.addEventListener('input', ()=> rendition && rendition.themes.fontSize(fontSize.value + '%'));
 
-      // Theme Toggle (hell/dunkel)
+      // Light/Dark Toggle (rein visuell)
       let manualLight = false;
       themeToggle.addEventListener('click', ()=>{
         manualLight = !manualLight;
@@ -277,14 +293,19 @@
         document.body.style.background = manualLight ? 'linear-gradient(180deg,#f7fbff 0,#eef3f9 100%)' : '';
       });
 
-      // Netlify Forms: Danke-Hinweis bei Redirect
+      // Danke-Hinweis bei Netlify-Form-Redirect
       const params = new URLSearchParams(location.search);
-      if(params.get('thanks') === '1'){
-        const t = document.getElementById('thanks'); if(t) t.style.display = 'block';
-      }
+      if(params.get('thanks') === '1'){ const t = document.getElementById('thanks'); if(t) t.style.display = 'block'; }
 
-      // Direktstart per Hash
-      if(location.hash.includes('lesen')) initReader();
+      // Sterne-UI optisch füllen (einfaches JS, optional)
+      const stars = document.querySelectorAll('.stars input');
+      const starLabels = document.querySelectorAll('.stars label');
+      stars.forEach((r)=>{
+        r.addEventListener('change', ()=>{
+          const v = Number(document.querySelector('.stars input:checked')?.value || 1);
+          starLabels.forEach((lab, idx)=> lab.classList.toggle('selected', (5-idx) <= v)); // simple fill
+        });
+      });
     })();
   </script>
 </body>
