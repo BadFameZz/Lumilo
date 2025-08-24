@@ -8,15 +8,15 @@
   <meta property="og:title" content="Lumilo — Leseprobe & Feedback" />
   <meta property="og:description" content="Leseprobe im Browser lesen und Feedback dalassen." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="cover.jpg" />
+  <meta property="og:image" content="lumilo - badfamezz.jpg" />
   <meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: dark)">
   <meta name="theme-color" content="#f6f8fb" media="(prefers-color-scheme: light)">
   <style>
-    /* macOS 26 "Liquid Glass" inspiriertes, modernes Design */
+    /* macOS 26 "Liquid Glass" inspiriertes Design */
     :root{
       --bg-d:#0b0f14; --bg-l:#f6f8fb; --text-d:#e8eef7; --text-l:#0d1117;
       --glass: rgba(255,255,255,.08); --stroke: rgba(255,255,255,.14);
-      --brand: #5cc8ff; --brand-2:#9fe3ff; --ok:#3ddc97; --warn:#ffb65c;
+      --brand:#5cc8ff; --brand-2:#9fe3ff; --ok:#3ddc97; --warn:#ffb65c;
       --shadow: 0 10px 40px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
     }
     *{box-sizing:border-box}
@@ -31,54 +31,40 @@
       -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
     }
     @media (prefers-color-scheme: light){ body{ color:var(--text-l); background:linear-gradient(180deg,#f7fbff 0,#eef3f9 100%);} .card, .panel{ background:rgba(255,255,255,.65);} }
-
     a{color:var(--brand); text-decoration:none}
     a:hover{text-decoration:underline}
-
     .container{ width:min(1100px,92%); margin:0 auto; }
-
-    /* Topbar im macOS-Fensterstil */
     header{ position:sticky; top:0; z-index:20; backdrop-filter: saturate(140%) blur(12px); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)); border-bottom:1px solid var(--stroke); }
     .top{ display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0; }
     .brand{ display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.2px; }
     .traffic{ display:inline-grid; grid-auto-flow:column; gap:8px; }
     .dot{ width:12px; height:12px; border-radius:50%; box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 0 0 1px rgba(0,0,0,.25); }
     .dot.red{ background:#ff5f57; } .dot.yellow{ background:#ffbd2e; } .dot.green{ background:#28c840; }
-
     .hero{ display:grid; gap:28px; padding:42px 0 8px; }
     .hero-inner{ display:grid; grid-template-columns:1.1fr .9fr; gap:28px; align-items:center; }
-
     .card{ border:1px solid var(--stroke); border-radius:20px; background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)); box-shadow: var(--shadow); }
     .card.pad{ padding:18px; }
-
     .title{ font-size:clamp(28px,4vw,44px); line-height:1.05; margin:6px 0 10px; }
     .subtitle{ color:#a7b3c2; margin:0 0 16px; }
     .badge{ display:inline-flex; align-items:center; gap:8px; padding:6px 10px; border:1px solid var(--stroke); border-radius:999px; font-size:12px; color:#a7b3c2; backdrop-filter: blur(8px); background:rgba(255,255,255,.06); }
-
     .row{ display:flex; flex-wrap:wrap; gap:12px; align-items:center; }
     .btn{ display:inline-flex; align-items:center; gap:10px; padding:12px 16px; border-radius:12px; border:1px solid var(--stroke); font-weight:600; cursor:pointer; backdrop-filter: blur(8px);
       background:linear-gradient(180deg, var(--brand), var(--brand-2)); color:#001321; box-shadow: 0 6px 18px rgba(11,182,255,.25); }
     .btn.secondary{ background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)); color:inherit; }
     .btn:disabled{ opacity:.6; cursor:not-allowed; }
-
     .cover{ width:100%; aspect-ratio:3/4; object-fit:cover; border-radius:16px; border:1px solid var(--stroke); }
-
     .section{ padding:28px 0; }
     .grid{ display:grid; grid-template-columns:1fr 1fr; gap:24px; }
     .panel{ padding:18px; border-radius:18px; border:1px solid var(--stroke); background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)); box-shadow: var(--shadow); }
     .panel h3{ margin:0 0 8px; }
     .muted{ color:#a7b3c2; }
     .small{ font-size:14px; }
-
     .viewer{ height:70vh; min-height:420px; border-radius:16px; overflow:hidden; border:1px solid var(--stroke); position:relative; }
     .viewer-toolbar{ display:flex; gap:8px; align-items:center; justify-content:space-between; margin:10px 0 14px; }
     .chip{ padding:6px 10px; border:1px solid var(--stroke); border-radius:999px; backdrop-filter:blur(8px); background:rgba(255,255,255,.06); color:#a7b3c2; }
     .range{ accent-color: var(--brand); }
-
     footer{ border-top:1px solid var(--stroke); padding:26px 0 42px; color:#a7b3c2; }
-
     .bg-orb{ position:fixed; inset:auto -15% -15% auto; width:50vw; height:50vw; background: radial-gradient(closest-side, rgba(159,227,255,.14), transparent 70%); filter: blur(40px); pointer-events:none; z-index:-1; }
-
     @media (max-width: 900px){ .hero-inner{ grid-template-columns:1fr; } .grid{ grid-template-columns:1fr; } }
   </style>
 </head>
@@ -104,13 +90,13 @@
           <p class="muted">Kurzpitch (2–3 Sätze): Was erwartet Leser:innen? Für wen ist das Buch geschrieben? Welche Themen/Atmosphäre?</p>
           <div class="row" style="margin-top:14px;">
             <button id="readBtn" class="btn">Jetzt im Browser lesen</button>
-            <a id="downloadLink" class="btn secondary" href="lumilo.epub" download>EPUB herunterladen</a>
+            <a id="downloadLink"$1href="lumilo - badfamezz.epub" download>EPUB herunterladen</a>
             <a class="btn secondary" href="#feedback">Feedback geben</a>
           </div>
           <p class="small muted" style="margin-top:10px;">Hinweis: Das Online-Lesen funktioniert am besten in modernen Browsern. Auf E‑Readern bitte die EPUB-Datei nutzen.</p>
         </div>
         <div class="card pad">
-          <img class="cover" src="cover.jpg" alt="Buchcover" />
+          <img id="cover" class="cover" src="lumilo - badfamezz.jpg" alt="Buchcover" />
         </div>
       </div>
     </section>
@@ -135,12 +121,49 @@
     <section id="feedback" class="section grid">
       <div class="panel">
         <h3>Dein Feedback (3–5 Minuten)</h3>
-        <p class="muted">Bitte beantworte die Fragen unten. Markiere gerne konkrete Stellen (Kapitel/Absatz), wenn etwas unklar oder besonders gelungen war.</p>
-        <div style="aspect-ratio:16/14;width:100%;border:1px solid var(--stroke);border-radius:12px;overflow:hidden;">
-          <!-- Ersetze den src mit deinem Formular-Link (Google Forms / Tally) -->
-          <iframe title="Feedback-Formular" src="about:blank" width="100%" height="100%" style="border:0;background:transparent;"></iframe>
-        </div>
-        <p class="small muted" style="margin-top:10px;">Alternativ: <a href="mailto:dein.name@example.com?subject=Feedback%20zur%20Leseprobe">Feedback per E‑Mail senden</a></p>
+        <p class="muted">Fülle das kurze Formular aus. Konkrete Stellen (Kapitel/Absatz) bitte nennen.</p>
+        <!-- Netlify Forms: funktioniert ohne weiteren Code im Netlify-Dashboard -->
+        <form name="feedback" method="POST" action="/?thanks=1" data-netlify="true" netlify-honeypot="bot-field" style="display:grid; gap:12px;">
+          <input type="hidden" name="form-name" value="feedback" />
+          <p class="hidden" style="display:none;">
+            <label>Bitte nicht ausfüllen: <input name="bot-field" /></label>
+          </p>
+          <label>Wie klar/motivierend ist der Einstieg?
+            <select name="einstieg">
+              <option>1 - unklar</option>
+              <option>2</option>
+              <option>3 - okay</option>
+              <option>4</option>
+              <option>5 - sehr klar</option>
+            </select>
+          </label>
+          <label>Würdest du weiterlesen?
+            <select name="continue">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </label>
+          <label>Stellen, die langsam/verwirrend waren
+            <textarea name="slow" rows="3" placeholder="Kapitel/Absatz + kurzer Grund"></textarea>
+          </label>
+          <label>Hauptfigur in 3 Adjektiven
+            <input name="char3" type="text" placeholder="z. B. ehrlich, impulsiv, verletzlich" />
+          </label>
+          <label>Sonstiges Feedback
+            <textarea name="notes" rows="4"></textarea>
+          </label>
+          <label class="small muted">E‑Mail (optional, für Rückfragen)
+            <input name="email" type="email" placeholder="beispiel@mail.de" />
+          </label>
+          <div class="row">
+            <button class="btn" type="submit">Feedback senden</button>
+            <span class="small muted">Datenschutz: Speicherung nur zur Überarbeitung; keine Weitergabe.</span>
+          </div>
+        </form>
+        <div id="thanks" class="small muted" style="display:none; margin-top:10px;">Danke! Dein Feedback wurde gesendet.</div>
       </div>
       <div class="panel">
         <h3>Worauf ich besonders Feedback möchte</h3>
@@ -151,17 +174,16 @@
           <li>Unklarheiten/Logikfehler – bitte mit Stelle</li>
           <li>Würdest du weiterlesen (1–5)? Was fehlt zu 5?</li>
         </ul>
-        <p class="small muted">Datenschutz: Antworten werden nur zur Überarbeitung dieser Leseprobe genutzt. Keine Weitergabe an Dritte.</p>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="container small">© <span id="year"></span> BadFameZz. Alle Rechte vorbehalten. · Version v0.1 · <a href="#feedback">Feedback</a></div>
+    <div class="container small">© <span id="year"></span> BadFameZz. Alle Rechte vorbehalten. · Version v1.0 · <a href="#feedback">Feedback</a></div>
   </footer>
 
   <noscript>
-    <div class="container" style="padding:14px; color:#ffb4b4;">Diese Seite benötigt JavaScript. Du kannst die <a href="lumilo.epub">EPUB-Datei hier herunterladen</a>.</div>
+    <div class="container" style="padding:14px; color:#ffb4b4;">Diese Seite benötigt JavaScript. Du kannst die <a href="lumilo - badfamezz.epub">EPUB-Datei hier herunterladen</a>.</div>
   </noscript>
 
   <!-- EPUB.js laden -->
@@ -176,21 +198,36 @@
       const fontSize = document.getElementById('fontSize');
       const themeToggle = document.getElementById('themeToggle');
       const yearEl = document.getElementById('year');
+      const downloadLink = document.getElementById('downloadLink');
+      const cover = document.getElementById('cover');
       yearEl.textContent = new Date().getFullYear();
 
-      const CANDIDATES = [
-        'lumilo.epub',
-        'Lumilo - BadFameZz.epub',
-        'book.epub'
-      ];
+      // Fallback-Cover (SVG, eingebettet)
+      const COVER_FALLBACK = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1600" viewBox="0 0 1200 1600">
+          <defs>
+            <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#0b0f14"/>
+              <stop offset="50%" stop-color="#152234"/>
+              <stop offset="100%" stop-color="#0b0f14"/>
+            </linearGradient>
+          </defs>
+          <rect width="1200" height="1600" fill="url(#g)"/>
+          <circle cx="980" cy="180" r="420" fill="rgba(159,227,255,0.14)"/>
+          <text x="80" y="820" font-family="ui-rounded,-apple-system,system-ui,Segoe UI,Roboto" font-size="160" fill="#e8eef7">Lumilo</text>
+          <text x="84" y="900" font-family="ui-rounded,-apple-system,system-ui,Segoe UI,Roboto" font-size="40" fill="#a7b3c2">Leseprobe</text>
+        </svg>`);
+      cover.addEventListener('error', ()=>{ cover.src = COVER_FALLBACK; });
+
+      const CANDIDATES = [ 'lumilo - badfamezz.epub', 'lumilo.epub', 'Lumilo - BadFameZz.epub', 'book.epub' ];
       const PROGRESS_KEY = 'epub-progress-cfi-v1';
       let book, rendition, chosenUrl = null;
 
       async function resolveBookUrl(){
         for(const url of CANDIDATES){
-          try{ const r = await fetch(url, { method:'HEAD' }); if(r.ok){ return url; } }catch(_){}
+          try{ const r = await fetch(url, { method:'HEAD' }); if(r.ok){ return url; } }catch(_){/* ignore */}
         }
-        return CANDIDATES[0];
+        return null;
       }
 
       function humanPercent(loc){
@@ -200,30 +237,38 @@
 
       async function initReader(){
         if(rendition) return;
+        if(!chosenUrl){ chosenUrl = await resolveBookUrl(); }
+        if(!chosenUrl){
+          readBtn.disabled = true; readBtn.textContent = 'EPUB fehlt';
+          return;
+        }
         readerSection.style.display = 'block';
-        chosenUrl = chosenUrl || await resolveBookUrl();
         book = ePub(chosenUrl);
         rendition = book.renderTo('viewer',{ width:'100%', height:'100%', spread:'auto', allowScriptedContent:false });
         try{ await book.ready; await book.locations.generate(750); }catch{}
-
         rendition.themes.default({ body: { background: 'transparent', color: 'inherit', lineHeight: '1.6' }});
         rendition.themes.fontSize(fontSize.value + '%');
-
         rendition.on('relocated', (loc)=>{
           locEl.textContent = humanPercent(loc);
           if(loc?.start?.cfi) localStorage.setItem(PROGRESS_KEY, loc.start.cfi);
         });
-
         const saved = localStorage.getItem(PROGRESS_KEY);
         try{ await rendition.display(saved || undefined); }catch{ await rendition.display(); }
       }
+
+      // Download-Link & Button-Status vorbereiten
+      (async ()=>{
+        chosenUrl = await resolveBookUrl();
+        if(chosenUrl){ downloadLink.href = chosenUrl; }
+        else{ downloadLink.setAttribute('aria-disabled','true'); downloadLink.classList.add('disabled'); downloadLink.textContent='EPUB fehlt'; }
+      })();
 
       readBtn.addEventListener('click', initReader);
       prevBtn.addEventListener('click', ()=> rendition && rendition.prev());
       nextBtn.addEventListener('click', ()=> rendition && rendition.next());
       fontSize.addEventListener('input', ()=> rendition && rendition.themes.fontSize(fontSize.value + '%'));
 
-      // Theme Toggle (hell/dunkel via prefers-color-scheme beachten)
+      // Theme Toggle (hell/dunkel)
       let manualLight = false;
       themeToggle.addEventListener('click', ()=>{
         manualLight = !manualLight;
@@ -231,6 +276,12 @@
         document.body.style.color = manualLight ? 'var(--text-l)' : 'var(--text-d)';
         document.body.style.background = manualLight ? 'linear-gradient(180deg,#f7fbff 0,#eef3f9 100%)' : '';
       });
+
+      // Netlify Forms: Danke-Hinweis bei Redirect
+      const params = new URLSearchParams(location.search);
+      if(params.get('thanks') === '1'){
+        const t = document.getElementById('thanks'); if(t) t.style.display = 'block';
+      }
 
       // Direktstart per Hash
       if(location.hash.includes('lesen')) initReader();
