@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Meine Leseprobe – Feedback erbeten</title>
+  <meta name="description" content="Leseprobe als EPUB im Browser lesen, herunterladen und strukturiertes Feedback geben." />
+  <!-- Open Graph for nicer link previews -->
+  <meta property="og:title" content="Meine Leseprobe – Feedback erbeten" />
+  <meta property="og:description" content="Leseprobe im Browser lesen und Feedback dalassen." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="cover.jpg" /> <!-- Ersetze durch dein Cover-Bild -->
+
+  <!-- Minimal, framework-freies CSS -->
+  <style>
+    :root {
+      --bg: #0b0f14; --card: #101823; --muted: #a7b3c2; --text: #e8eef7; --brand: #3aa0ff; --brand-2: #7bd7ff;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"; background: linear-gradient(180deg, #0c141f 0%, #0b0f14 100%); color: var(--text); }
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { width: min(1100px, 92%); margin: 0 auto; }
+    header { padding: 28px 0; border-bottom: 1px solid rgba(255,255,255,.06); backdrop-filter: blur(6px); position: sticky; top: 0; background: rgba(11,15,20,.75); z-index: 10; }
+    .brand { display: flex; gap: 12px; align-items: center; font-weight: 700; letter-spacing: .3px; }
+    .badge { display: inline-block; padding: 2px 8px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; font-size: 12px; color: var(--muted); }
+    .hero { display: grid; grid-template-columns: 1fr; gap: 24px; padding: 48px 0 12px; }
+    .hero-inner { display: grid; grid-template-columns: 1.1fr .9fr; gap: 28px; align-items: center; }
+    .card { background: radial-gradient(120% 120% at 0% 0%, #142032 0, #0e1622 70%, #0b0f14 100%); border: 1px solid rgba(255,255,255,.08); border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,.35); }
+    .cover { width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 14px; border: 1px solid rgba(255,255,255,.12); }
+    .title { font-size: clamp(28px, 4vw, 42px); line-height: 1.1; margin: 4px 0 10px; }
+    .subtitle { color: var(--muted); margin: 0 0 16px; }
+    .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: 12px; border: 1px solid rgba(255,255,255,.12); font-weight: 600; cursor: pointer; background: linear-gradient(180deg, var(--brand), var(--brand-2)); color: #001321; box-shadow: 0 6px 18px rgba(11,182,255,.25); }
+    .btn.secondary { background: transparent; color: var(--text); }
+    .btn:disabled { opacity: .6; cursor: not-allowed; }
+    .section { padding: 28px 0; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .panel { padding: 18px; border-radius: 16px; border: 1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, #0f1723, #0d1420); }
+    .panel h3 { margin: 0 0 8px; }
+    .muted { color: var(--muted); }
+    .small { font-size: 14px; }
+    .viewer { height: 70vh; min-height: 420px; border-radius: 14px; overflow: hidden; border: 1px solid rgba(255,255,255,.12); position: relative; }
+    .viewer-toolbar { display: flex; gap: 8px; align-items: center; justify-content: space-between; margin: 10px 0 14px; }
+    .viewer-toolbar .left, .viewer-toolbar .right { display: flex; align-items: center; gap: 8px; }
+    .chip { padding: 6px 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; }
+    .range { accent-color: var(--brand); }
+    footer { border-top: 1px solid rgba(255,255,255,.06); padding: 26px 0 42px; color: var(--muted); }
+    @media (max-width: 900px) { .hero-inner { grid-template-columns: 1fr; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container row" style="justify-content: space-between;">
+      <div class="brand">📖 <span>EPUB Leseprobe</span></div>
+      <div class="badge">Kostenlos • Feedback willkommen</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-inner">
+        <div>
+          <div class="badge">Leseprobe</div>
+          <h1 class="title">TITEL DES BUCHES</h1>
+          <p class="subtitle">von <strong>Autor:in</strong> · Genre · ~XX.000 Wörter</p>
+          <p class="muted">Kurzpitch (2–3 Sätze): Was erwartet Leser:innen? Für wen ist das Buch geschrieben? Welche Themen/Atmosphäre?</p>
+          <div class="row" style="margin-top:14px;">
+            <button id="readBtn" class="btn">Jetzt im Browser lesen</button>
+            <a id="downloadLink" class="btn secondary" href="book.epub" download>EPUB herunterladen</a>
+            <a class="btn secondary" href="#feedback">Feedback geben</a>
+          </div>
+          <p class="small muted" style="margin-top:10px;">Hinweis: Das Online-Lesen funktioniert am besten in modernen Browsern. Auf E-Readern bitte die EPUB-Datei nutzen.</p>
+        </div>
+        <div class="card" style="padding: 14px;">
+          <img class="cover" src="cover.jpg" alt="Buchcover" />
+        </div>
+      </div>
+    </section>
+
+    <section id="readerSection" class="section" style="display:none;">
+      <div class="viewer-toolbar">
+        <div class="left">
+          <button id="prev" class="btn secondary">⟵ Zurück</button>
+          <button id="next" class="btn secondary">Weiter ⟶</button>
+          <span id="loc" class="chip small muted">0%</span>
+        </div>
+        <div class="right">
+          <label class="small muted" for="fontSize">Schriftgröße</label>
+          <input id="fontSize" class="range" type="range" min="80" max="140" value="100" />
+        </div>
+      </div>
+      <div id="viewer" class="viewer"></div>
+      <p class="small muted" style="margin-top:8px;">Dein Lesefortschritt wird lokal im Browser gespeichert.</p>
+    </section>
+
+    <section id="feedback" class="section grid">
+      <div class="panel">
+        <h3>Dein Feedback (3–5 Minuten)</h3>
+        <p class="muted">Bitte beantworte die Fragen unten. Markiere gerne konkrete Stellen (Kapitel/Absatz), wenn etwas unklar oder besonders gelungen war.</p>
+        <!-- Ersetze den src mit deinem eingebetteten Google-Form- oder Tally-Form-Link -->
+        <div style="aspect-ratio: 16/14; width: 100%; border: 1px solid rgba(255,255,255,.12); border-radius: 12px; overflow: hidden;">
+          <iframe title="Feedback-Formular" src="about:blank" width="100%" height="100%" style="border:0; background:#0b0f14;"></iframe>
+        </div>
+        <p class="small muted" style="margin-top:10px;">Alternativ: <a href="mailto:dein.name@example.com?subject=Feedback%20zur%20Leseprobe">Feedback per E‑Mail senden</a></p>
+      </div>
+      <div class="panel">
+        <h3>Worauf ich besonders Feedback möchte</h3>
+        <ul class="muted">
+          <li>Ist der Einstieg klar und motivierend?</li>
+          <li>Tempo/Spannung: Wo wird es langsam?</li>
+          <li>Hauptfigur nach Kapitel X in 3 Adjektiven?</li>
+          <li>Unklarheiten/Logikfehler – bitte mit Stelle</li>
+          <li>Würdest du weiterlesen (1–5)? Was fehlt zu 5?</li>
+        </ul>
+        <p class="small muted">Datenschutz: Antworten werden nur zur Überarbeitung dieser Leseprobe genutzt. Keine Weitergabe an Dritte.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container small">
+      © <span id="year"></span> Dein Name. Alle Rechte vorbehalten. · Version v0.1 · <a href="#feedback">Feedback</a>
+    </div>
+  </footer>
+
+  <noscript>
+    <div class="container" style="padding:14px; color:#ffb4b4;">Diese Seite benötigt JavaScript, um die Leseprobe im Browser anzuzeigen. Du kannst die <a href="book.epub">EPUB-Datei hier herunterladen</a>.</div>
+  </noscript>
+
+  <!-- EPUB.js von CDN laden -->
+  <script src="https://unpkg.com/epubjs/dist/epub.min.js"></script>
+  <script>
+    (function() {
+      const readBtn = document.getElementById('readBtn');
+      const readerSection = document.getElementById('readerSection');
+      const viewerEl = document.getElementById('viewer');
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+      const locEl = document.getElementById('loc');
+      const fontSize = document.getElementById('fontSize');
+      const yearEl = document.getElementById('year');
+      yearEl.textContent = new Date().getFullYear();
+
+      const BOOK_URL = 'book.epub'; // Lege deine EPUB-Datei im selben Ordner ab
+      const PROGRESS_KEY = 'epub-progress-cfi-v1';
+
+      let book, rendition;
+
+      function humanPercent(loc) {
+        if (!loc || !book || !book.locations || !book.locations.percentageFromCfi) return '0%';
+        try {
+          const pct = book.locations.percentageFromCfi(loc.start.cfi) * 100;
+          return Math.round(pct) + '%';
+        } catch (_) { return '0%'; }
+      }
+
+      async function initReader() {
+        if (rendition) return; // bereits initialisiert
+        readerSection.style.display = 'block';
+
+        book = ePub(BOOK_URL);
+        rendition = book.renderTo('viewer', { width: '100%', height: '100%', spread: 'auto', allowScriptedContent: false });
+        const saved = localStorage.getItem(PROGRESS_KEY);
+
+        book.ready.then(async () => {
+          // Locations generieren für Prozentanzeige
+          try { await book.locations.generate(750); } catch (e) { /* ignore */ }
+        });
+
+        rendition.themes.default({ 'body': { 'background': '#0b0f14', 'color': '#e8eef7', 'line-height': '1.6' } });
+        rendition.themes.fontSize(fontSize.value + '%');
+
+        rendition.on('relocated', (loc) => {
+          locEl.textContent = humanPercent(loc);
+          if (loc && loc.start && loc.start.cfi) localStorage.setItem(PROGRESS_KEY, loc.start.cfi);
+        });
+
+        rendition.on('displayed', () => {
+          // Erste Prozentanzeige, falls nötig
+          const current = rendition.currentLocation();
+          if (current) locEl.textContent = humanPercent(current);
+        });
+
+        if (saved) {
+          try { await rendition.display(saved); } catch (e) { await rendition.display(); }
+        } else {
+          await rendition.display();
+        }
+      }
+
+      readBtn.addEventListener('click', initReader);
+      prevBtn.addEventListener('click', () => rendition && rendition.prev());
+      nextBtn.addEventListener('click', () => rendition && rendition.next());
+      fontSize.addEventListener('input', () => rendition && rendition.themes.fontSize(fontSize.value + '%'));
+
+      // Optional: Auto-init if hash contains #lesen
+      if (location.hash.includes('lesen')) initReader();
+    })();
+  </script>
+</body>
+</html>
